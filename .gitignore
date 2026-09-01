@@ -1,0 +1,22 @@
+﻿# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+backend/lead_hunter.db
+backend/venv/
+
+# Node / Frontend
+frontend/node_modules/
+node_modules/
+frontend/dist/
+dist/
+.env
+.env.local
+.env.production
+.DS_Store
+Thumbs.db

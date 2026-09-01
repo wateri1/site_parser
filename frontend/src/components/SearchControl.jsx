@@ -2,12 +2,12 @@ import React from "react";
 import { Search, Filter, Loader2, Sparkles, SlidersHorizontal, ArrowRight } from "lucide-react";
 
 const SUGGESTIONS = [
+  "Адвокат Алматы",
+  "Кухни на заказ СПб",
   "Барбершоп Москва",
-  "Косметолог СПб",
   "Ремонт квартир Казань",
   "Дизайн интерьера Екатеринбург",
-  "Фитнес тренер Сочи",
-  "Маникюр Самара"
+  "Детейлинг Астана"
 ];
 
 export default function SearchControl({
@@ -15,10 +15,13 @@ export default function SearchControl({
   setQuery,
   limit,
   setLimit,
+  searchType = "user",
+  setSearchType,
   filterType,
   setFilterType,
   onStartParse,
-  isLoading
+  isLoading,
+  apifyToken
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,6 +31,18 @@ export default function SearchControl({
 
   return (
     <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl shadow-slate-950/50 space-y-4">
+      
+      {/* Mode Status Banner */}
+      {!apifyToken && (
+        <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>
+              <strong>Внимание: включен Демо-режим</strong> (сгенерируются тестовые лиды). Чтобы парсить живых людей из Instagram — укажите токен в <strong>«Настройках Apify»</strong> в правом верхнем углу.
+            </span>
+          </div>
+        </div>
+      )}
       
       {/* Search Input Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -48,9 +63,24 @@ export default function SearchControl({
             />
           </div>
 
+          {/* Search Type Selector */}
+          <div className="w-full md:w-44 flex items-center bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-1.5 focus-within:border-blue-500 transition-all">
+            <span className="text-xs text-slate-400 mr-2 whitespace-nowrap">Тип:</span>
+            <select
+              value={searchType}
+              onChange={(e) => setSearchType && setSearchType(e.target.value)}
+              disabled={isLoading}
+              className="bg-transparent text-white font-medium text-xs w-full focus:outline-none cursor-pointer"
+            >
+              <option value="user" className="bg-slate-900 text-white">Профили (user)</option>
+              <option value="hashtag" className="bg-slate-900 text-white">Хештег (hashtag)</option>
+              <option value="place" className="bg-slate-900 text-white">Место (place)</option>
+            </select>
+          </div>
+
           {/* Manual Limit Input */}
-          <div className="w-full md:w-48 flex items-center bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-1.5 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
-            <span className="text-xs text-slate-400 mr-2 whitespace-nowrap">Искать до:</span>
+          <div className="w-full md:w-40 flex items-center bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-1.5 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+            <span className="text-xs text-slate-400 mr-2 whitespace-nowrap">Лимит:</span>
             <input
               type="number"
               min={1}

@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import SearchControl from "../components/SearchControl";
 import StatsCards from "../components/StatsCards";
 import LeadTrackerTable from "../components/LeadTrackerTable";
@@ -19,6 +19,8 @@ export default function MainPage({
   setQuery,
   limit,
   setLimit,
+  searchType,
+  setSearchType,
   filterType,
   setFilterType
 }) {
@@ -65,10 +67,13 @@ export default function MainPage({
         setQuery={setQuery}
         limit={limit}
         setLimit={setLimit}
+        searchType={searchType}
+        setSearchType={setSearchType}
         filterType={filterType}
         setFilterType={setFilterType}
         onStartParse={onStartParse}
         isLoading={isLoading}
+        apifyToken={apifyToken}
       />
 
       {/* 2. Stats Summary Cards (only when leads exist) */}

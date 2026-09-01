@@ -1,13 +1,14 @@
-﻿import axios from "axios";
+import axios from "axios";
 
 const API_BASE = "/api";
 
 export const api = {
   // Start parsing
-  startParsing: async ({ query, limit = 20, filter_type = "all", apify_token = "", is_mock = false }) => {
+  startParsing: async ({ query, limit = 20, search_type = "user", filter_type = "all", apify_token = "", is_mock = false }) => {
     const res = await axios.post(`${API_BASE}/parse`, {
       query,
       limit: Number(limit),
+      search_type,
       filter_type,
       apify_token: apify_token || undefined,
       is_mock

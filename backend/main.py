@@ -60,6 +60,7 @@ async def create_parsing_session(
         raw_leads = await fetch_apify_leads(
             query=query_clean,
             limit=payload.limit,
+            search_type=payload.search_type,
             filter_type=payload.filter_type,
             apify_token=payload.apify_token
         )

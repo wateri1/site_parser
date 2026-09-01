@@ -1,10 +1,11 @@
-﻿from pydantic import BaseModel
+from pydantic import BaseModel
 from typing import Optional, List
 import datetime
 
 class ParseRequest(BaseModel):
     query: str
     limit: int = 20
+    search_type: str = "user" # "user", "hashtag", "place"
     filter_type: str = "all" # "all", "no_site", "whatsapp", "multilink"
     apify_token: Optional[str] = None
     is_mock: bool = False

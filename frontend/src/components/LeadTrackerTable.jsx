@@ -92,11 +92,11 @@ export default function LeadTrackerTable({
           <div className="flex flex-col space-y-1">
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 w-fit">
               <MessageCircle className="w-3 h-3 mr-1" />
-              WhatsApp
+              {lead.link_label || "WhatsApp"}
             </span>
             {lead.external_url && (
               <a
-                href={lead.external_url}
+                href={lead.external_url.startsWith("http") ? lead.external_url : `https://${lead.external_url}`}
                 target="_blank"
                 rel="noreferrer"
                 className="text-[11px] text-slate-400 hover:text-emerald-400 truncate max-w-[140px] flex items-center gap-0.5"
@@ -111,11 +111,11 @@ export default function LeadTrackerTable({
           <div className="flex flex-col space-y-1">
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-300 border border-purple-500/30 w-fit">
               <LinkIcon className="w-3 h-3 mr-1" />
-              Мультиссылка (Taplink)
+              {lead.link_label || "Мультиссылка (Taplink)"}
             </span>
             {lead.external_url && (
               <a
-                href={lead.external_url}
+                href={lead.external_url.startsWith("http") ? lead.external_url : `https://${lead.external_url}`}
                 target="_blank"
                 rel="noreferrer"
                 className="text-[11px] text-slate-400 hover:text-purple-300 truncate max-w-[140px] flex items-center gap-0.5"
@@ -130,7 +130,7 @@ export default function LeadTrackerTable({
           <div className="flex flex-col space-y-1">
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 w-fit">
               <Globe className="w-3 h-3 mr-1 text-slate-400" />
-              Есть сайт
+              {lead.link_label || "Есть сайт"}
             </span>
             {lead.external_url && (
               <a

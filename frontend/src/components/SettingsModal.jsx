@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { X, Key, ExternalLink, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
 
 export default function SettingsModal({ isOpen, onClose, apifyToken, onSaveToken }) {
@@ -65,11 +65,19 @@ export default function SettingsModal({ isOpen, onClose, apifyToken, onSaveToken
           <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
             <div className="flex items-center space-x-2 text-slate-300 font-medium text-xs">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>Режим работы без токена (Демо-режим)</span>
+              <span>Формат запроса к Apify (Instagram Search Scraper)</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Если токен не указан, парсер автоматически использует интеллектуальный генератор реалистичных лидов с живыми профилями, био, анализом наличия сайтов и Taplink. Это позволяет полноценно тестировать CRM-таблицы и экспорт в Excel абсолютно бесплатно.
+              Парсинг работает по официальной структуре актора <code className="text-blue-400 font-mono">apify/instagram-search-scraper</code>:
             </p>
+            <pre className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 font-mono overflow-x-auto">
+{`{
+  "search": "адвокат Алматы",
+  "searchType": "user",
+  "searchLimit": 20,
+  "resultsLimit": 20
+}`}
+            </pre>
           </div>
 
           <div className="flex items-center space-x-2 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl">

@@ -13,6 +13,7 @@ export default function App() {
   // Search & Session State
   const [query, setQuery] = useState("");
   const [limit, setLimit] = useState(20);
+  const [searchType, setSearchType] = useState("user");
   const [filterType, setFilterType] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,6 +52,7 @@ export default function App() {
       const data = await api.startParsing({
         query: query.trim(),
         limit,
+        search_type: searchType,
         filter_type: filterType,
         apify_token: apifyToken,
         is_mock: !apifyToken
@@ -131,6 +133,8 @@ export default function App() {
             setQuery={setQuery}
             limit={limit}
             setLimit={setLimit}
+            searchType={searchType}
+            setSearchType={setSearchType}
             filterType={filterType}
             setFilterType={setFilterType}
           />

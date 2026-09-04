@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -62,11 +62,29 @@ def test_workflow():
         "full_name": first_lead["full_name"],
         "niche": "барбершоп",
         "link_type": "no_site",
-        "tone": "business"
+        "tone": "business",
+        "mode": "template"
     })
     assert r.status_code == 200
     offer = r.json()
-    print(f"   [OK] Offer generated subject: '{offer['subject']}'")
+    print(f"   [OK] Offer template generated subject: '{offer['subject']}'")
+
+    print("7. Testing ChatGPT B2B Elite Copywriter offer generation...")
+    r2 = client.post("/api/generate-offer", json={
+        "username": first_lead["username"],
+        "full_name": first_lead["full_name"],
+        "niche": "барбершоп",
+        "link_type": "no_site",
+        "link_label": "Только WhatsApp (нет сайта)",
+        "followers_count": 12000,
+        "mode": "chatgpt"
+    })
+    assert r2.status_code == 200
+    gpt_offer = r2.json()
+    assert gpt_offer["is_chatgpt"] is True
+    assert len(gpt_offer["offer_text"]) > 20
+    print(f"   [OK] ChatGPT B2B Offer generated: '{gpt_offer['subject']}'")
+    print(f"        Words in body: {len(gpt_offer['offer_text'].split())}")
 
     print("\nAll automated tests passed successfully!")
 

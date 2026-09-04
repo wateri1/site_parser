@@ -11,6 +11,7 @@ import models
 import schemas
 from services.apify_service import fetch_apify_leads
 from services.exporter import generate_excel_export
+from services.openai_service import generate_chatgpt_b2b_offer
 
 # Initialize Database tables
 Base.metadata.create_all(bind=engine)
@@ -198,12 +199,35 @@ def export_session_excel(session_id: str, db: Session = Depends(get_db)):
     )
 
 @app.post("/api/generate-offer", response_model=schemas.OfferResponse)
-def generate_ai_offer(req: schemas.OfferRequest):
+async def generate_ai_offer(req: schemas.OfferRequest):
     """
-    UI Mock / Template generator for AI-generated outreach offers
+    Generates outreach offers:
+    - mode="chatgpt": Elite B2B copywriter tailored for Our Business via OpenAI GPT-4o-mini
+    - mode="template": Instant pre-crafted templates (friendly, business, bold)
     """
+    if req.mode == "chatgpt":
+        lead_dict = {
+            "username": req.username,
+            "full_name": req.full_name,
+            "niche": req.niche,
+            "biography": req.biography,
+            "link_label": req.link_label or req.link_type,
+            "followers_count": req.followers_count
+        }
+        try:
+            res = await generate_chatgpt_b2b_offer(lead_dict, api_key=req.openai_api_key)
+            return schemas.OfferResponse(
+                subject=res["subject"],
+                offer_text=res["offer_text"],
+                strategy_breakdown=res.get("strategy_breakdown"),
+                subject_lines=res.get("subject_lines", []),
+                is_chatgpt=True
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
     name = req.full_name or f"@{req.username}"
-    niche = req.niche or "бизнеса"
+    niche = req.niche or "вашей сферы"
     
     if req.tone == "business":
         subject = f"Коммерческое предложение по сайту для {name}"
@@ -245,4 +269,10 @@ def generate_ai_offer(req: schemas.OfferRequest):
 
 С удовольствием покажу бесплатный прототип. Отправить вам ссылку посмотреть?"""
 
-    return schemas.OfferResponse(subject=subject, offer_text=text)
+    return schemas.OfferResponse(
+        subject=subject,
+        offer_text=text,
+        strategy_breakdown="Базовый шаблон (без вызова AI)",
+        subject_lines=[subject],
+        is_chatgpt=False
+    )

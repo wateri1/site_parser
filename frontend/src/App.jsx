@@ -8,6 +8,7 @@ import { api } from "./services/api";
 export default function App() {
   const [activeTab, setActiveTab] = useState("main");
   const [apifyToken, setApifyToken] = useState(() => localStorage.getItem("apify_token") || "");
+  const [openaiKey, setOpenaiKey] = useState(() => localStorage.getItem("openai_key") || "");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Search & Session State
@@ -41,6 +42,15 @@ export default function App() {
       localStorage.setItem("apify_token", token);
     } else {
       localStorage.removeItem("apify_token");
+    }
+  };
+
+  const handleSaveOpenaiKey = (key) => {
+    setOpenaiKey(key);
+    if (key) {
+      localStorage.setItem("openai_key", key);
+    } else {
+      localStorage.removeItem("openai_key");
     }
   };
 
@@ -129,6 +139,7 @@ export default function App() {
             onUpdateLead={handleUpdateLead}
             onDeleteLead={handleDeleteLead}
             apifyToken={apifyToken}
+            openaiKey={openaiKey}
             query={query}
             setQuery={setQuery}
             limit={limit}
@@ -159,6 +170,8 @@ export default function App() {
         onClose={() => setIsSettingsOpen(false)}
         apifyToken={apifyToken}
         onSaveToken={handleSaveToken}
+        openaiKey={openaiKey}
+        onSaveOpenaiKey={handleSaveOpenaiKey}
       />
     </div>
   );

@@ -1,19 +1,34 @@
 import React, { useState } from "react";
 import { X, Key, ExternalLink, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
 
-export default function SettingsModal({ isOpen, onClose, apifyToken, onSaveToken }) {
+export default function SettingsModal({
+  isOpen,
+  onClose,
+  apifyToken,
+  onSaveToken,
+  openaiKey,
+  onSaveOpenaiKey
+}) {
   const [tokenInput, setTokenInput] = useState(apifyToken || "");
+  const [openaiInput, setOpenaiInput] = useState(openaiKey || "");
 
   if (!isOpen) return null;
 
   const handleSave = () => {
     onSaveToken(tokenInput.trim());
+    if (onSaveOpenaiKey) {
+      onSaveOpenaiKey(openaiInput.trim());
+    }
     onClose();
   };
 
   const handleClear = () => {
     setTokenInput("");
+    setOpenaiInput("");
     onSaveToken("");
+    if (onSaveOpenaiKey) {
+      onSaveOpenaiKey("");
+    }
   };
 
   return (
@@ -26,7 +41,7 @@ export default function SettingsModal({ isOpen, onClose, apifyToken, onSaveToken
             <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
               <Key className="w-4 h-4" />
             </div>
-            <h3 className="text-base font-semibold text-white">Настройки Apify API</h3>
+            <h3 className="text-base font-semibold text-white">Настройки API (Apify + OpenAI)</h3>
           </div>
           <button
             onClick={onClose}
@@ -38,9 +53,10 @@ export default function SettingsModal({ isOpen, onClose, apifyToken, onSaveToken
 
         {/* Content */}
         <div className="p-6 space-y-5">
+          {/* Apify Token */}
           <div>
             <label className="block text-xs font-medium text-slate-300 mb-1.5">
-              Personal API Token (Apify)
+              Personal API Token (Apify Instagram Scraper)
             </label>
             <input
               type="password"
@@ -59,6 +75,28 @@ export default function SettingsModal({ isOpen, onClose, apifyToken, onSaveToken
               >
                 Apify Integrations <ExternalLink className="w-3 h-3" />
               </a>
+            </p>
+          </div>
+
+          {/* OpenAI API Key */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-medium text-slate-300">
+                OpenAI API Key (ChatGPT для генерации офферов)
+              </label>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-mono">
+                GPT-4o
+              </span>
+            </div>
+            <input
+              type="password"
+              value={openaiInput}
+              onChange={(e) => setOpenaiInput(e.target.value)}
+              placeholder="sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx"
+              className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors font-mono"
+            />
+            <p className="text-xs text-slate-400 mt-1.5">
+              Используется для кнопки «Сгенерировать под наш бизнес» по методикам The Challenger Sale & Predictable Revenue.
             </p>
           </div>
 

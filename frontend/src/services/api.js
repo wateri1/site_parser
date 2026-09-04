@@ -51,14 +51,30 @@ export const api = {
     return `${API_BASE}/sessions/${sessionId}/export`;
   },
 
-  // Generate AI Offer
-  generateOffer: async ({ username, full_name, niche, link_type, tone }) => {
+  // Generate AI Offer (Template or ChatGPT B2B)
+  generateOffer: async ({
+    username,
+    full_name,
+    niche,
+    link_type,
+    link_label,
+    biography,
+    followers_count,
+    tone = "friendly",
+    mode = "template",
+    openai_api_key
+  }) => {
     const res = await axios.post(`${API_BASE}/generate-offer`, {
       username,
       full_name,
       niche,
       link_type,
-      tone
+      link_label,
+      biography,
+      followers_count,
+      tone,
+      mode,
+      openai_api_key: openai_api_key || undefined
     });
     return res.data;
   }

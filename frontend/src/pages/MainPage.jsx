@@ -15,6 +15,7 @@ export default function MainPage({
   onUpdateLead,
   onDeleteLead,
   apifyToken,
+  openaiKey,
   query,
   setQuery,
   limit,
@@ -108,6 +109,7 @@ export default function MainPage({
         onClose={() => setSelectedLeadForOffer(null)}
         lead={selectedLeadForOffer}
         onMarkContacted={handleMarkContactedFromOffer}
+        openaiApiKey={openaiKey}
       />
 
     </div>

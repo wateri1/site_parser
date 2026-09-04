@@ -61,8 +61,16 @@ class OfferRequest(BaseModel):
     full_name: Optional[str] = ""
     niche: Optional[str] = ""
     link_type: Optional[str] = "no_site"
+    link_label: Optional[str] = ""
+    biography: Optional[str] = ""
+    followers_count: Optional[int] = 0
     tone: str = "friendly" # "friendly", "business", "bold"
+    mode: Optional[str] = "template" # "template" or "chatgpt"
+    openai_api_key: Optional[str] = None
 
 class OfferResponse(BaseModel):
     subject: str
     offer_text: str
+    strategy_breakdown: Optional[str] = None
+    subject_lines: Optional[List[str]] = []
+    is_chatgpt: bool = False

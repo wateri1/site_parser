@@ -1,11 +1,12 @@
 @echo off
+chcp 65001 >nul
 title LeadHunter App
 echo ========================================================
-echo   Starting LeadHunter (FastAPI Backend + React Frontend)
+echo   Запуск LeadHunter (FastAPI Backend + React Frontend)
 echo ========================================================
 
-start "LeadHunter Backend (FastAPI)" cmd /k "cd backend && venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000"
-start "LeadHunter Frontend (React)" cmd /k "cd frontend && npm run dev"
+start "LeadHunter Backend (FastAPI)" cmd /k "chcp 65001 >nul && cd /d %~dp0backend && venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000"
+start "LeadHunter Frontend (React)" cmd /k "chcp 65001 >nul && cd /d %~dp0frontend && npm run dev"
 
 echo.
 echo Application launched!

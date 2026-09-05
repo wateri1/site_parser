@@ -109,27 +109,46 @@ echo.
 :: ---------------------------------------------------------------------
 echo [3/5] Настройка бэкенда (Python Virtual Environment)...
 
+set "PYTHONHOME="
+set "PYTHONPATH="
+
 cd /d "%~dp0backend"
 
-if exist "venv" (
-    echo [i] Найдено существующее окружение venv. Проверяем библиотеки...
+set "NEED_NEW_VENV=0"
+if exist "venv\Scripts\python.exe" (
+    call venv\Scripts\python.exe -c "import encodings" >nul 2>&1
+    if errorlevel 1 (
+        echo [!] Существующий venv поврежден или скопирован с другого ПК (No module named 'encodings').
+        set "NEED_NEW_VENV=1"
+    ) else (
+        echo [OK] Существующий venv исправен.
+    )
 ) else (
-    echo [*] Создаем чистое изолированное окружение venv с 0...
+    set "NEED_NEW_VENV=1"
+)
+
+if "%NEED_NEW_VENV%"=="1" (
+    if exist "venv" (
+        echo [*] Удаляем старый несовместимый venv...
+        rmdir /s /q "venv"
+    )
+    echo [*] Создаем чистое виртуальное окружение с 0...
     %PY_CMD% -m venv venv
-    if %errorlevel% neq 0 (
-        echo [ОШИБКА] Не удалось создать venv.
+    if errorlevel 1 (
+        echo [ОШИБКА] Не удалось создать venv через %PY_CMD%!
         pause
         exit /b 1
     )
+    echo [OK] Новое окружение venv создано.
 )
 
 echo [*] Обновление pip и установка библиотек из requirements.txt...
 call venv\Scripts\python.exe -m pip install --upgrade pip --quiet
 call venv\Scripts\pip.exe install -r requirements.txt --quiet
-if %errorlevel% neq 0 (
-    echo [ОШИБКА] Ошибка при установке Python пакетов. Пробуем повторно без флага quiet:
+if errorlevel 1 (
+    echo [i] Повторная попытка установки пакетов в подробном режиме:
     call venv\Scripts\pip.exe install -r requirements.txt
-    if %errorlevel% neq 0 (
+    if errorlevel 1 (
         echo [ОШИБКА] Не удалось установить зависимости бэкенда!
         pause
         exit /b 1
